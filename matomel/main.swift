@@ -11,10 +11,8 @@ import ArgumentParser
 struct Matomel: ParsableCommand {
     static var configuration = CommandConfiguration(
         commandName: "matomel",
-        abstract: "This text is abst.",
-        discussion: """
-        This text is discuss.
-        """,
+        abstract: "Matomel is a tool that moves files on your desktop that haven't been updated for a long time to an archive folder.",
+//        discussion: "",
         version: "0.9.0",
         shouldDisplay: true,
         helpNames: [.long, .short]
@@ -41,9 +39,8 @@ struct Matomel: ParsableCommand {
         do {
             let fileList = try fileManager.contentsOfDirectory(atPath: NSHomeDirectory() + "/Desktop")
             let targetFileList = fileList.filter { judgeTargetFile(filename: $0) }
-            print(targetFileList)
             
-//            try createDirectory(path: archiveDirectoryPath)
+            try createDirectory(path: archiveDirectoryPath)
             try targetFileList.forEach {
                 try moveFile(
                     fromPath: desktopDirectoryPath.appendingPathComponent($0),
@@ -78,12 +75,12 @@ struct Matomel: ParsableCommand {
         let fileManager: AnyObject = FileManager()
 
         do {
-            // judge1
+            // judge: filename
             if filename.contains("archive_") {
                 return false
             }
             
-            // judge2
+            // judge: compare countDate
             let now = NSDate()
             let attributes = try fileManager.attributesOfItem(atPath: NSHomeDirectory() + "/Desktop/" + filename)
             let fileUpdatedDate = attributes[.modificationDate]!
@@ -96,11 +93,11 @@ struct Matomel: ParsableCommand {
     }
     
     func moveFile(fromPath: URL, toPath: URL) throws {
-//        let fileManager: AnyObject = FileManager()
-//
-//        do {
-//            try fileManager.moveItem(at: fromPath, to: toPath)
-//        }
+        let fileManager: AnyObject = FileManager()
+
+        do {
+            try fileManager.moveItem(at: fromPath, to: toPath)
+        }
     }
 }
 
