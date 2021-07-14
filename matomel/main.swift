@@ -20,17 +20,12 @@ struct Matomel: ParsableCommand {
     
     @Option(
         name: .shortAndLong,
-        help: "Archive file name."
-    )
-    var filename: String = "archive"
-    
-    @Option(
-        name: .shortAndLong,
         help: ""
     )
     var countDate: Int = 30
     
     func run() throws {
+        let filename: String = "archive"
         let filenameAddedDate: String = filename + "_" + getCurrentDate()
         let fileManager: AnyObject = FileManager.default
         let desktopDirectoryPath: URL = fileManager.homeDirectoryForCurrentUser.appendingPathComponent("Desktop")
@@ -39,7 +34,7 @@ struct Matomel: ParsableCommand {
         do {
             let fileList = try fileManager.contentsOfDirectory(atPath: NSHomeDirectory() + "/Desktop")
             let targetFileList = fileList.filter { judgeTargetFile(filename: $0) }
-            
+
             try createDirectory(path: archiveDirectoryPath)
             try targetFileList.forEach {
                 try moveFile(
@@ -51,7 +46,7 @@ struct Matomel: ParsableCommand {
             print(error)
         }
     }
-        
+
     func getCurrentDate() -> String {
         let date: Date = Date()
         let format = DateFormatter()
@@ -98,6 +93,13 @@ struct Matomel: ParsableCommand {
         do {
             try fileManager.moveItem(at: fromPath, to: toPath)
         }
+    }
+}
+
+struct RuntimeError: Error, CustomStringConvertible {
+    var description: String
+    init(_ description: String) {
+        self.description = description
     }
 }
 

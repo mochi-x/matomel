@@ -10,7 +10,7 @@ Matomel is a tool that moves files on your desktop that haven't been updated for
 
 ## Usage
 ```
-matomel -f [save destination folder name] -c [count date]
+matomel -c [count date]
 ```
 
 
